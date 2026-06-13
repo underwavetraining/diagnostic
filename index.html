@@ -156,8 +156,8 @@ const T={
      badK:"Cuello de botella",badM:'<b>{X}</b> es lo más bajo del perfil — la mayor distancia entre lo que el alumno hace en calma y bajo esfuerzo real. <b>Prioridad del programa.</b>'},
    pil:{co2:"Tolerancia al CO₂",auto:"Autorregulación",efic:"Eficiencia acuática",recup:"Recuperación"},
    tests:{bolt:{nm:"BOLT",ref:"segundos en reposo · 40s = óptimo"},
-     vr:{nm:"Apnea VR (vacío)",ref:"segundos · pulmón vacío · 45s+ = óptimo"},
-     est:{nm:"Apnea CPT (lleno)",ref:"mm:ss · confort · 2:00+ = óptimo"},
+     vr:{nm:"Apnea VR (vacío)",short:"Apnea VR",ref:"segundos · pulmón vacío · 45s+ = óptimo"},
+     est:{nm:"Apnea CPT (lleno)",short:"Apnea CPT",ref:"mm:ss · confort · 2:00+ = óptimo"},
      co2s:{nm:"CO₂ swimming",ref:"bloques 4-6-8-10",opts:["No llega al bloque 6","Completa hasta bloque 6","Completa hasta bloque 8","200m · RPE alto","200m · RPE bajo"]},
      crol:{nm:"100m crol",ref:"mm:ss · <1:20 = óptimo"},
      uo:{nm:"Under-Overs 200m",ref:"mm:ss · <3:45 = óptimo"},
@@ -178,8 +178,8 @@ const T={
      badK:"Bottleneck",badM:'<b>{X}</b> is the lowest in the profile — the biggest gap between calm and real-effort performance. <b>Program priority.</b>'},
    pil:{co2:"CO₂ Tolerance",auto:"Self-regulation",efic:"Aquatic efficiency",recup:"Recovery"},
    tests:{bolt:{nm:"BOLT",ref:"seconds at rest · 40s = optimal"},
-     vr:{nm:"RV Breath-hold (residual volume)",ref:"seconds · empty lung · 45s+ = optimal"},
-     est:{nm:"TLC Breath-hold (total lung capacity)",ref:"mm:ss · comfort · 2:00+ = optimal"},
+     vr:{nm:"RV Breath-hold (residual volume)",short:"RV Breath-hold",ref:"seconds · empty lung · 45s+ = optimal"},
+     est:{nm:"TLC Breath-hold (total lung capacity)",short:"TLC Breath-hold",ref:"mm:ss · comfort · 2:00+ = optimal"},
      co2s:{nm:"CO₂ swimming",ref:"blocks 4-6-8-10",opts:["Doesn’t reach block 6","Completes to block 6","Completes to block 8","200m · high RPE","200m · low RPE"]},
      crol:{nm:"100m freestyle",ref:"mm:ss · <1:20 = optimal"},
      uo:{nm:"Under-Overs 200m",ref:"mm:ss · <3:45 = optimal"},
@@ -189,7 +189,7 @@ const T={
 };
 let lang='es'; try{const s=localStorage.getItem('uwlang'); if(s&&T[s])lang=s;}catch(e){}
 function tt(){return T[lang];}
-function testNm(k){return tt().tests[k].nm;} function testRef(k){return tt().tests[k].ref;} function pilName(k){return tt().pil[k];}
+function testNm(k){return tt().tests[k].nm;} function testRef(k){return tt().tests[k].ref;} function pilName(k){return tt().pil[k];} function testShort(k){return tt().tests[k].short||tt().tests[k].nm;}
 
 const TESTS=[
  {key:'bolt',pil:'co2',kind:'sec',def:'35',anc:[[10,2],[20,4],[30,6],[40,9],[50,10]]},
@@ -254,9 +254,9 @@ function render(){
   while(dotsG.firstChild)dotsG.removeChild(dotsG.firstChild); while(labelsG.firstChild)labelsG.removeChild(labelsG.firstChild);
   for(let i=0;i<n;i++){const t=TESTS[i]; const[ax,ay]=pt(i,vals[t.key]);
     dotsG.appendChild(mk('circle',{cx:ax.toFixed(1),cy:ay.toFixed(1),r:4.5,fill:COL[t.pil],stroke:'#0C2740','stroke-width':1.5}));
-    const[lx,ly]=pt(i,11.4); let anc='middle'; if(lx>cx+6)anc='start'; else if(lx<cx-6)anc='end';
-    const t1=mk('text',{x:lx.toFixed(0),y:ly.toFixed(0),'text-anchor':anc,fill:'#C9D6E4','font-size':13,'font-weight':600}); t1.textContent=testNm(t.key); labelsG.appendChild(t1);
-    const t2=mk('text',{x:lx.toFixed(0),y:(ly+15).toFixed(0),'text-anchor':anc,fill:COL[t.pil],'font-size':12,'font-weight':700}); t2.textContent=vals[t.key].toFixed(1); labelsG.appendChild(t2);
+    const[lx,ly]=pt(i,11.0); let anc='middle'; if(lx>cx+6)anc='start'; else if(lx<cx-6)anc='end';
+    const t1=mk('text',{x:lx.toFixed(0),y:ly.toFixed(0),'text-anchor':anc,fill:'#C9D6E4','font-size':12,'font-weight':600}); t1.textContent=testShort(t.key); labelsG.appendChild(t1);
+    const t2=mk('text',{x:lx.toFixed(0),y:(ly+14).toFixed(0),'text-anchor':anc,fill:COL[t.pil],'font-size':11,'font-weight':700}); t2.textContent=vals[t.key].toFixed(1); labelsG.appendChild(t2);
   }
   const ph=document.getElementById('pillars'); ph.innerHTML=''; let pscores=[];
   PIL.forEach(p=>{
